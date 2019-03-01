@@ -1,5 +1,64 @@
 #include "ft_ssl.h"
-#define LEFTROTATE(x, c) (((x) << (c)) | ((x) >> (32 - (c))))
+
+uint32_t	calc_g(uint32_t i)
+{
+	uint32_t g;
+
+	g = 0;
+	g = i <= 15 ? i : g;
+	g = 16 <= i && i <= 31
+		? (5*i + 1) % 16 : g;
+	g = 32 <= i && i <= 47
+		? (3*i + 5) % 16 : g;
+	g = 48 <= i && i <= 63
+		? (7*i) % 16 : g;
+	return (g);
+}
+
+uint32_t	calc_f(uint32_t i,
+				   uint32_t b,
+				   uint32_t c,
+				   uint32_t d)
+{
+	uint32_t f;
+
+	f = 0;
+	if (i < 16)
+		f = (b & c) | ((~b) & d);
+	else if (16 <= i && i <= 31)
+		f = (d & b) | ((~d) & c);
+	else if (32 <= i && i <= 47)
+		f = b ^ c ^ d;
+	else if (48 <= i && i <= 63)
+		f = c ^ (b | (~d));
+	return (f);
+}
+
+void		update_hash(uint32_t *hash,
+					uint32_t *w,
+					uint32_t *k,
+					uint32_t *s)
+{
+	uint32_t f;
+	uint32_t i = 0;
+	uint32_t tmp[4];
+
+	ft_memcpy(tmp, hash, sizeof(uint32_t) * 4);
+	while (i < 64)
+	{
+		f = calc_f(i, tmp[1], tmp[2] , tmp[3]);
+		f += tmp[0] + k[i] + w[calc_g(i)];
+		tmp[0] = tmp[3];
+		tmp[3] = tmp[2];
+		tmp[2] = tmp[1];
+		tmp[1] += f << s[i] | f >> (32 - s[i]);
+		i++;
+	}
+	hash[0] += tmp[0];
+	hash[1] += tmp[1];
+	hash[2] += tmp[2];
+	hash[3] += tmp[3];
+}
 
 void	filler(uint32_t *s, char *nums)
 {
@@ -53,10 +112,6 @@ char	*md5(char *input)
 	hash[1] = 0xefcdab89;
 	hash[2] = 0x98badcfe;
 	hash[3] = 0x10325476;
-	/* uint32_t a0 = 0x67452301; */
-	/* uint32_t b0 = 0xefcdab89; */
-	/* uint32_t c0 = 0x98badcfe; */
-	/* uint32_t d0 = 0x10325476; */
 
 	input_len = ft_strlen(input);
 	for (new_len = input_len * 8 + 1; new_len % 512 != 448; new_len++)
@@ -71,41 +126,7 @@ char	*md5(char *input)
 	for (offset = 0; offset < new_len; offset += (512 / 8))
 	{
 		uint32_t *w = (uint32_t *) (msg + offset);
-		uint32_t a = hash[0];
-		uint32_t b = hash[1];
-		uint32_t c = hash[2];
-		uint32_t d = hash[3];
-		uint32_t i;
-		uint32_t f;
-		uint32_t g;
-
-		f = 0;
-		for (i=0; i<64; i++)
-		{
-
-			 if (i < 16) {
-				f = (b & c) | ((~b) & d);
-				g = i;
-			} else if (16 <= i && i <= 31) {
-				f = (d & b) | ((~d) & c);
-				g = (5*i + 1) % 16;
-			} else if (32 <= i && i <= 47) {
-				f = b ^ c ^ d;
-				g = (3*i + 5) % 16;
-			 } else if (48 <= i && i <= 63){
-				f = c ^ (b | (~d));
-				g = (7*i) % 16;
-			}
-			f += a + k[i] + w[g];
-			a = d;
-			d = c;
-			c = b;
-			b += LEFTROTATE(f, s[i]);
-		}
-		hash[0] += a;
-		hash[1] += b;
-		hash[2] += c;
-		hash[3] += d;
+		update_hash(hash, w, k, s);
 	}
 	ft_printf("%x", revbytes32(hash[0]));
 	ft_printf("%x", revbytes32(hash[1]));
