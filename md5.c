@@ -85,7 +85,17 @@ void	fill_s(uint32_t *s)
 	filler(s + 48, "6 10 15 21 6 10 15 21 6 10 15 21 6 10 15 21");
 }
 
-char	*md5(char *input)
+void	init_hash(t_hash *hash)
+{
+	hash->num_parts = 4;
+	hash->parts = xv(malloc(sizeof(uint32_t) * 4), MALLOC);
+	hash->parts[0] = 0x67452301;
+	hash->parts[1] = 0xefcdab89;
+	hash->parts[2] = 0x98badcfe;
+	hash->parts[3] = 0x10325476;
+}
+
+t_hash	*md5(t_hash *hash, char *input)
 {
 	size_t		input_len;
 	size_t		new_len;
@@ -108,13 +118,8 @@ char	*md5(char *input)
 		0x655b59c3, 0x8f0ccc92, 0xffeff47d, 0x85845dd1,
 		0x6fa87e4f, 0xfe2ce6e0, 0xa3014314, 0x4e0811a1,
 		0xf7537e82, 0xbd3af235, 0x2ad7d2bb, 0xeb86d391};
-	uint32_t hash[4];
 	fill_s(s);
-	hash[0] = 0x67452301;
-	hash[1] = 0xefcdab89;
-	hash[2] = 0x98badcfe;
-	hash[3] = 0x10325476;
-
+	init_hash(hash);
 	input_len = ft_strlen(input);
 	for (new_len = input_len * 8 + 1; new_len % 512 != 448; new_len++)
 		;
@@ -128,11 +133,7 @@ char	*md5(char *input)
 	for (offset = 0; offset < new_len; offset += (512 / 8))
 	{
 		uint32_t *w = (uint32_t *) (msg + offset);
-		update_hash(hash, w, k, s);
+		update_hash(hash->parts, w, k, s);
 	}
-	ft_printf("%x", revbytes32(hash[0]));
-	ft_printf("%x", revbytes32(hash[1]));
-	ft_printf("%x", revbytes32(hash[2]));
-	ft_printf("%x\n", revbytes32(hash[3]));
-	return (msg);
+	return (hash);
 }

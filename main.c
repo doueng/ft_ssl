@@ -1,71 +1,37 @@
 #include "ft_ssl.h"
 
-uint32_t get_options(int argc, char *argv[])
+void	process_args(t_env *env, char *argv[])
 {
-	uint32_t options;
+	int		fd;
 
-	(void) argc;
-	(void) argv;
-	options = 0;
-	options |= I;
-	return (options);
-}
-
-void	*ft_realloc(void *src, size_t old_size, size_t new_size)
-{
-	void *new;
-
-	new = xv(ft_memalloc(new_size), MALLOC);
-	ft_memcpy(new, src, old_size);
-	return (new);
-}
-
-char	*get_input_string(void)
-{
-	char	buff;
-	size_t	len;
-	size_t	size;
-	char	*str;
-
-	size = 5;
-	str = xv(ft_strnew(size), MALLOC);
-	len = 0;
-	while (x(read(STDIN_FILENO, &buff, 1), READ))
+	while (*(*++argv) == '-')
+		;
+	ft_printf("%s\n", *argv);
+	if ((fd = open(*argv, 0, O_RDONLY)) == -1)
+		hasher(env, *argv, IS_STR);
+	else
+		read_from_fd(env, fd);
+	fd = 0;
+	while (*++argv)
 	{
-		if (len >= size)
-		{
-			str = xv(ft_realloc(str, size, size * 2), MALLOC);
-			size *= 2;
-		}
-		str[len++] = buff;
+		if ((fd = open(*argv, 0, O_RDONLY)) != -1)
+			read_from_fd(env, fd);
+		else
+			ft_printf("ft_ssl: md5: %s: No such file or directory\n", *argv);
 	}
-	return (str);
-}
-
-char	*convert_string(t_env *env, char *str)
-{
-	char *conv_str;
-
-	(void)env;
-	conv_str = md5(str);
-	return (conv_str);
-}
-
-int read_from_stdin(t_env *env)
-{
-	char	*str;
-
-	str = get_input_string();
-	convert_string(env, str);
-	/* print_str(env, hash_str); */
-	return (0);
 }
 
 int main(int argc, char *argv[])
 {
 	t_env env;
 
+	if (argc < 2)
+		x(-1, USAGE);
 	ft_bzero(&env, sizeof(env));
+	argv++;
+	env.cmd = *argv;
 	env.options = get_options(argc, argv);
-	return (read_from_stdin(&env));
+	read_from_fd(&env, STDIN_FILENO);
+	process_args(&env, argv);
+	return (0);
 }

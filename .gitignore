@@ -1,3 +1,5 @@
 *.o
+file
+test.sh
 compile_commands.json
 ft_ssl
