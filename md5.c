@@ -41,9 +41,10 @@ void		update_hash(uint32_t *hash,
 					uint32_t *s)
 {
 	uint32_t f;
-	uint32_t i = 0;
+	uint32_t i;
 	uint32_t tmp[4];
 
+	i = 0;
 	ft_memcpy(tmp, hash, sizeof(uint32_t) * 4);
 	while (i < 64)
 	{

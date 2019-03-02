@@ -27,13 +27,16 @@ char	*get_input_string(void)
 	size_t	size;
 	char	*str;
 
-	size = 1000;
+	size = 5;
 	str = xv(ft_strnew(size), MALLOC);
 	len = 0;
 	while (x(read(STDIN_FILENO, &buff, 1), READ))
 	{
 		if (len >= size)
+		{
 			str = xv(ft_realloc(str, size, size * 2), MALLOC);
+			size *= 2;
+		}
 		str[len++] = buff;
 	}
 	return (str);
