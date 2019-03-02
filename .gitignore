@@ -1,5 +1,7 @@
 *.o
+libft.a
 file
 test.sh
 compile_commands.json
 ft_ssl
+vgcore.*

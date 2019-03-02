@@ -95,7 +95,7 @@ void	init_hash(t_hash *hash)
 	hash->parts[3] = 0x10325476;
 }
 
-t_hash	*md5(t_hash *hash, char *input)
+void	md5(t_hash *hash, char *input)
 {
 	size_t		input_len;
 	size_t		new_len;
@@ -135,5 +135,4 @@ t_hash	*md5(t_hash *hash, char *input)
 		uint32_t *w = (uint32_t *) (msg + offset);
 		update_hash(hash->parts, w, k, s);
 	}
-	return (hash);
 }

@@ -18,7 +18,7 @@ static char	*get_fd_string(int fd)
 	char	*str;
 	int		ret;
 
-	size = 100;
+	size = 5;
 	str = xv(ft_strnew(size), MALLOC);
 	len = 0;
 	x(fcntl(fd, F_SETFL, O_NONBLOCK), FCNTL); // Remove???
@@ -39,13 +39,13 @@ static char	*get_fd_string(int fd)
 	return (str);
 }
 
-int				read_from_fd(t_env *env, int fd)
+int				read_from_fd(t_env *env, char *arg, int fd)
 {
 	char	*str;
 
 	if (!(str = get_fd_string(fd)))
 		return (0);
-	hasher(env, str, IS_FILE);
+	hasher(env, arg, str, fd == STDIN_FILENO ? STDIN : FILE);
 	free(str);
 	return (0);
 }

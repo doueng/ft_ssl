@@ -4,18 +4,19 @@ void	process_args(t_env *env, char *argv[])
 {
 	int		fd;
 
-	while (*(*++argv) == '-')
-		;
-	ft_printf("%s\n", *argv);
+	while (*argv && **argv == '-')
+		argv++;
+	if (!*argv)
+		return ;
 	if ((fd = open(*argv, 0, O_RDONLY)) == -1)
-		hasher(env, *argv, IS_STR);
+		hasher(env, *argv, *argv, STR);
 	else
-		read_from_fd(env, fd);
+		read_from_fd(env, *argv, fd);
 	fd = 0;
 	while (*++argv)
 	{
 		if ((fd = open(*argv, 0, O_RDONLY)) != -1)
-			read_from_fd(env, fd);
+			read_from_fd(env, *argv, fd);
 		else
 			ft_printf("ft_ssl: md5: %s: No such file or directory\n", *argv);
 	}
@@ -30,8 +31,8 @@ int main(int argc, char *argv[])
 	ft_bzero(&env, sizeof(env));
 	argv++;
 	env.cmd = *argv;
-	env.options = get_options(argc, argv);
-	read_from_fd(&env, STDIN_FILENO);
-	process_args(&env, argv);
+	env.options = get_options(argc, argv + 1);
+	read_from_fd(&env, "", STDIN_FILENO);
+	process_args(&env, argv + 1);
 	return (0);
 }

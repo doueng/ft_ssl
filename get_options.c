@@ -24,10 +24,6 @@ uint32_t		get_options(int argc, char *argv[])
 
 	(void) argc;
 	options = 0;
-	options = ft_strequ(*argv, "md5") ? MD5 : options;
-	options = ft_strequ(*argv, "sha256") ? SHA256 : options;
-	if (options == 0)
-		x(-1, USAGE);
 	while (*++argv && **argv == '-')
 		options |= check_options((*argv) + 1);
 	return (options);

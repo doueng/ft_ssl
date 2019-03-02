@@ -5,6 +5,11 @@
 # include <fcntl.h>
 # include <errno.h>
 
+# define P_OP 0b1
+# define Q_OP 0b10
+# define R_OP 0b100
+# define S_OP 0b1000
+
 typedef struct	s_env
 {
 	uint32_t	options;
@@ -15,20 +20,15 @@ typedef struct	s_hash
 {
 	uint32_t	*parts;
 	size_t		num_parts;
-	char		*name;
 }				t_hash;
 
 enum
 {
-	IS_FILE,
-	IS_STR,
+	FILE,
+	STR,
+	STDIN,
 	MD5,
 	SHA256,
-	I_OP,
-	P_OP,
-	Q_OP,
-	R_OP,
-	S_OP
 };
 
 enum
@@ -44,12 +44,12 @@ enum
 	SPLIT
 };
 
-t_hash		*md5(t_hash *hash, char *input);
-void		hasher(t_env *env, char *str, char is_file);
+void		md5(t_hash *hash, char *input);
+void		hasher(t_env *env, char *arg, char *str, char source);
+int			read_from_fd(t_env *env, char *arg, int fd);
 uint32_t	get_options(int argc, char *argv[]);
 int			x(int res, int error);
 void		*xv(void *res, int error);
 uint32_t	revbytes32(uint32_t bytes);
-int			read_from_fd(t_env *env, int fd);
 
 #endif
