@@ -44,6 +44,8 @@ enum
 	SPLIT
 };
 
+uint32_t	calc_f(uint32_t i, uint32_t b, uint32_t c, uint32_t d);
+uint32_t	calc_g(uint32_t i);
 void		md5(t_hash *hash, char *input);
 void		hasher(t_env *env, char *arg, char *str, char source);
 int			read_from_fd(t_env *env, char *arg, int fd);

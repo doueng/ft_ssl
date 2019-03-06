@@ -8,11 +8,11 @@ void	process_args(t_env *env, char *argv[])
 		argv++;
 	if (!*argv)
 		return ;
-	if ((fd = open(*argv, 0, O_RDONLY)) == -1)
+	if (env->options & S_OP)
+	{
+		argv++;
 		hasher(env, *argv, *argv, STR);
-	else
-		read_from_fd(env, *argv, fd);
-	fd = 0;
+	}
 	while (*++argv)
 	{
 		if ((fd = open(*argv, 0, O_RDONLY)) != -1)
@@ -24,14 +24,14 @@ void	process_args(t_env *env, char *argv[])
 
 int main(int argc, char *argv[])
 {
-	t_env env;
+	t_env	env;
 
 	if (argc < 2)
 		x(-1, USAGE);
 	ft_bzero(&env, sizeof(env));
 	argv++;
 	env.cmd = *argv;
-	env.options = get_options(argc, argv + 1);
+	env.options = get_options(argc, argv);
 	read_from_fd(&env, "", STDIN_FILENO);
 	process_args(&env, argv + 1);
 	return (0);
