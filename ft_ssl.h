@@ -22,13 +22,13 @@ typedef struct	s_hash
 	size_t		num_parts;
 }				t_hash;
 
+typedef void (*hash_func_t)(t_hash*, char*);
+
 enum
 {
 	FILE,
 	STR,
 	STDIN,
-	MD5,
-	SHA256,
 };
 
 enum
@@ -44,12 +44,13 @@ enum
 	SPLIT
 };
 
+uint32_t	get_options(char *argv[]);
+void		sha256(t_hash *hash, char *input);
 uint32_t	calc_f(uint32_t i, uint32_t b, uint32_t c, uint32_t d);
 uint32_t	calc_g(uint32_t i);
 void		md5(t_hash *hash, char *input);
 void		hasher(t_env *env, char *arg, char *str, char source);
 int			read_from_fd(t_env *env, char *arg, int fd);
-uint32_t	get_options(int argc, char *argv[]);
 int			x(int res, int error);
 void		*xv(void *res, int error);
 uint32_t	revbytes32(uint32_t bytes);

@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 	ft_bzero(&env, sizeof(env));
 	argv++;
 	env.cmd = *argv;
-	env.options = get_options(argc, argv);
+	env.options = get_options(argv);
 	read_from_fd(&env, "", STDIN_FILENO);
 	process_args(&env, argv + 1);
 	return (0);

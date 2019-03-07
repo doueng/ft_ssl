@@ -2,9 +2,7 @@
 
 static char	ft_toupper_char(char c)
 {
-	if (c >= 'a' && c <= 'z')
-		return (c - ('a' - 'A'));
-	return (c);
+	return (ft_isalpha(c) ? c - 0x20 : c);
 }
 
 static void print_p(t_env *env, char *arg, char source)
@@ -45,13 +43,20 @@ static void	print_hash(t_env *env, char *arg, t_hash *hash, char source)
 	ft_putchar('\n');
 }
 
+static hash_func_t get_hash_func(t_env *env)
+{
+	hash_func_t hash_func;
+
+	hash_func = ft_strequ(env->cmd, "md5") ? md5 : 0;
+	hash_func = ft_strequ(env->cmd, "sha256") ? sha256 : 0;
+	return (hash_func);
+}
+
 void		hasher(t_env *env, char *arg, char *str, char source)
 {
-	t_hash *hash;
+	t_hash hash;
 
-	hash = xv(ft_memalloc(sizeof(t_hash)), MALLOC);
-	if (ft_strequ(env->cmd, "md5"))
-		md5(hash, str);
-	print_hash(env, source == STDIN ? str : arg, hash, source);
-	free(hash);
+	(get_hash_func(env))(&hash, str);
+	print_hash(env, source == STDIN ? str : arg, &hash, source);
+	free(hash.parts);
 }

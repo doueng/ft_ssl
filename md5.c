@@ -24,7 +24,7 @@ static uint32_t s[] = {
 		4, 11, 16, 23,  4, 11, 16, 23,  4, 11, 16, 23,  4, 11, 16, 23,
 		6, 10, 15, 21,  6, 10, 15, 21,  6, 10, 15, 21,  6, 10, 15, 21};
 
-void		update_hash(uint32_t *hash, uint32_t *w, uint32_t *k, uint32_t *s)
+static void		update_hash(uint32_t *hash, uint32_t *w, uint32_t *k, uint32_t *s)
 {
 	uint32_t f;
 	uint32_t i;
@@ -48,17 +48,7 @@ void		update_hash(uint32_t *hash, uint32_t *w, uint32_t *k, uint32_t *s)
 	hash[3] += tmp[3];
 }
 
-void	init_hash(t_hash *hash)
-{
-	hash->num_parts = 4;
-	hash->parts = xv(malloc(sizeof(uint32_t) * 4), MALLOC);
-	hash->parts[0] = 0x67452301;
-	hash->parts[1] = 0xefcdab89;
-	hash->parts[2] = 0x98badcfe;
-	hash->parts[3] = 0x10325476;
-}
-
-size_t	get_new_len(size_t input_len)
+static size_t	get_new_len(size_t input_len)
 {
 	size_t new_len;
 
@@ -68,7 +58,7 @@ size_t	get_new_len(size_t input_len)
 	return (new_len / 8);
 }
 
-char	*get_msg(size_t input_len,
+static char	*get_msg(size_t input_len,
 				size_t new_len,
 				char *input)
 {
@@ -83,7 +73,17 @@ char	*get_msg(size_t input_len,
 	return (msg);
 }
 
-void	md5(t_hash *hash, char *input)
+static void	init_hash(t_hash *hash)
+{
+	hash->num_parts = 4;
+	hash->parts = xv(malloc(sizeof(uint32_t) * 4), MALLOC);
+	hash->parts[0] = 0x67452301;
+	hash->parts[1] = 0xefcdab89;
+	hash->parts[2] = 0x98badcfe;
+	hash->parts[3] = 0x10325476;
+}
+
+void		md5(t_hash *hash, char *input)
 {
 	size_t		input_len;
 	size_t		new_len;

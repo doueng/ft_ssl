@@ -18,11 +18,10 @@ static uint32_t	check_options(char *opstr)
 	return (options);
 }
 
-uint32_t		get_options(int argc, char *argv[])
+uint32_t		get_options(char *argv[])
 {
 	uint32_t options;
 
-	(void) argc;
 	options = 0;
 	while (*++argv && **argv == '-')
 		options |= check_options((*argv) + 1);
