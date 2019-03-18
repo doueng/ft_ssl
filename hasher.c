@@ -2,7 +2,7 @@
 
 static char	ft_toupper_char(char c)
 {
-	return (ft_isalpha(c) ? c - 0x20 : c);
+	return (ft_isalpha(c) ? c & 95 : c);
 }
 
 static void print_p(t_env *env, char *arg, char source)
@@ -21,6 +21,8 @@ static void print_p(t_env *env, char *arg, char source)
 
 static void print_p_rev(t_env *env, char *arg, char source)
 {
+	if (env->options & Q_OP)
+		return ;
 	if (env->options & R_OP && source != STDIN)
 		source == FILE
 			? ft_printf(" %s", arg)
@@ -33,7 +35,7 @@ static void	print_hash(t_env *env, char *arg, t_hash *hash, char source)
 	char		print;
 
 	i = 0;
-	print = env->options & P_OP && (env->options & Q_OP) == 0;
+	print = env->options & P_OP || source == FILE || source == STR;
 	if (print)
 		print_p(env, arg, source);
 	while (hash->num_parts--)
@@ -47,8 +49,9 @@ static hash_func_t get_hash_func(t_env *env)
 {
 	hash_func_t hash_func;
 
-	hash_func = ft_strequ(env->cmd, "md5") ? md5 : 0;
-	hash_func = ft_strequ(env->cmd, "sha256") ? sha256 : 0;
+	hash_func = NULL;
+	hash_func = ft_strequ(env->cmd, "md5") ? md5 : hash_func;
+	hash_func = ft_strequ(env->cmd, "sha256") ? sha256 : hash_func;
 	return (hash_func);
 }
 

@@ -25,5 +25,7 @@ uint32_t		get_options(char *argv[])
 	options = 0;
 	while (*++argv && **argv == '-')
 		options |= check_options((*argv) + 1);
+	if (*argv)
+		options |= ARGS;
 	return (options);
 }

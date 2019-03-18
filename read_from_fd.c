@@ -21,10 +21,11 @@ static char	*get_fd_string(int fd)
 	size = 100;
 	str = xv(ft_strnew(size), MALLOC);
 	len = 0;
+	errno = 0;
 	while ((ret = (read(fd, &buff, 1))))
 	{
 		if (errno == EAGAIN)
-			return (NULL);
+			break ;
 		x(ret, READ);
 		if (len >= size)
 		{
@@ -33,7 +34,7 @@ static char	*get_fd_string(int fd)
 		}
 		str[len++] = buff;
 	}
-	if (fd != STDIN_FILENO)
+	if (fd != 0)
 		x(close(fd), CLOSE);
 	return (str);
 }
@@ -42,10 +43,9 @@ int				read_from_fd(t_env *env, char *arg, int fd)
 {
 	char	*str;
 
-	str = NULL;
-	if (!(str = get_fd_string(fd)))
-		return (0);
-	hasher(env, arg, str, fd == STDIN_FILENO ? STDIN : FILE);
+	str = get_fd_string(fd);
+	if (ft_strlen(str) > 0)
+		hasher(env, arg, str, fd == STDIN_FILENO ? STDIN : FILE);
 	free(str);
 	return (0);
 }

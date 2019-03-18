@@ -10,15 +10,16 @@ void	process_args(t_env *env, char *argv[])
 		return ;
 	if (env->options & S_OP)
 	{
-		argv++;
 		hasher(env, *argv, *argv, STR);
+		argv++;
 	}
-	while (*++argv)
+	while (*argv)
 	{
 		if ((fd = open(*argv, 0, O_RDONLY)) != -1)
 			read_from_fd(env, *argv, fd);
 		else
 			ft_printf("ft_ssl: md5: %s: No such file or directory\n", *argv);
+		argv++;
 	}
 }
 
@@ -32,7 +33,8 @@ int main(int argc, char *argv[])
 	argv++;
 	env.cmd = *argv;
 	env.options = get_options(argv);
-	read_from_fd(&env, "", STDIN_FILENO);
+	if ((env.options & ARGS && env.options & P_OP) || ((env.options & ARGS) == 0))
+		read_from_fd(&env, "", STDIN_FILENO);
 	process_args(&env, argv + 1);
 	return (0);
 }

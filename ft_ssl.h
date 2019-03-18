@@ -9,6 +9,7 @@
 # define Q_OP 0b10
 # define R_OP 0b100
 # define S_OP 0b1000
+# define ARGS 0b10000
 
 typedef struct	s_env
 {
@@ -28,7 +29,7 @@ enum
 {
 	FILE,
 	STR,
-	STDIN,
+	STDIN
 };
 
 enum
