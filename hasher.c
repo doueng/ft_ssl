@@ -13,7 +13,7 @@ static void print_p(t_env *env, char *arg, char source)
 	if (!(env->options & R_OP))
 	{
 		cmd = xv(ft_strmap(env->cmd, ft_toupper_char), MALLOC);
-		source == FILE ? ft_printf("%s (%s) = ", cmd, arg) : 0;
+		source == FILE ? ft_printf("%s(%s)= ", cmd, arg) : 0;
 		source == STR ? ft_printf("%s (\"%s\") = ", cmd, arg) : 0;
 		free(cmd);
 	}
@@ -39,7 +39,7 @@ static void	print_hash(t_env *env, char *arg, t_hash *hash, char source)
 	if (print)
 		print_p(env, arg, source);
 	while (hash->num_parts--)
-		ft_printf("%x", revbytes32(hash->parts[i++]));
+		ft_printf("%08x", hash->parts[i++]);
 	if (print)
 		print_p_rev(env, arg, source);
 	ft_putchar('\n');

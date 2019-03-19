@@ -24,14 +24,14 @@ static uint32_t s[] = {
 		4, 11, 16, 23,  4, 11, 16, 23,  4, 11, 16, 23,  4, 11, 16, 23,
 		6, 10, 15, 21,  6, 10, 15, 21,  6, 10, 15, 21,  6, 10, 15, 21};
 
-static void		update_hash(uint32_t *hash, uint32_t *w, uint32_t *k, uint32_t *s)
+static void		update_hash(t_hash *hash, uint32_t *w, uint32_t *k, uint32_t *s)
 {
 	uint32_t f;
 	uint32_t i;
 	uint32_t tmp[4];
 
 	i = 0;
-	ft_memcpy(tmp, hash, sizeof(uint32_t) * 4);
+	ft_memcpy(tmp, hash->parts, sizeof(tmp));
 	while (i < 64)
 	{
 		f = calc_f(i, tmp[1], tmp[2] , tmp[3]);
@@ -42,28 +42,15 @@ static void		update_hash(uint32_t *hash, uint32_t *w, uint32_t *k, uint32_t *s)
 		tmp[1] += f << s[i] | f >> (32 - s[i]);
 		i++;
 	}
-	hash[0] += tmp[0];
-	hash[1] += tmp[1];
-	hash[2] += tmp[2];
-	hash[3] += tmp[3];
+	add_chunk_to_hash(hash, tmp);
 }
 
-static size_t	get_new_len(size_t input_len)
-{
-	size_t new_len;
-
-	new_len = input_len * 8 + 1;
-	while (new_len % 512 != 448)
-		new_len++;
-	return (new_len / 8);
-}
-
-static char	*get_msg(size_t input_len,
+static uint8_t	*get_msg(size_t input_len,
 				size_t new_len,
 				char *input)
 {
 	uint32_t	bits_len;
-	char		*msg;
+	uint8_t		*msg;
 
 	msg = xv(ft_memalloc(new_len + 64), MALLOC);
 	ft_memcpy(msg, input, input_len);
@@ -87,16 +74,20 @@ void		md5(t_hash *hash, char *input)
 {
 	size_t		input_len;
 	size_t		new_len;
-	char		*msg;
+	uint8_t		*msg;
+	size_t		offset;
+	uint32_t	*w;
 
 	init_hash(hash);
 	input_len = ft_strlen(input);
 	new_len = get_new_len(input_len);
 	msg = get_msg(input_len, new_len, input);
-	size_t offset;
-	for (offset = 0; offset < new_len; offset += (512 / 8))
+	offset = 0;
+	while (offset < new_len)
 	{
-		uint32_t *w = (uint32_t *) (msg + offset);
-		update_hash(hash->parts, w, k, s);
+		w = (uint32_t*)(msg + offset);
+		update_hash(hash, w, k, s);
+		offset += 64;
 	}
+	rev_hash32(hash);
 }

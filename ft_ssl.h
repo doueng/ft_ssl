@@ -45,6 +45,10 @@ enum
 	SPLIT
 };
 
+void		rev_hash32(t_hash *hash);
+void		add_chunk_to_hash(t_hash *hash, uint32_t *tmp);
+uint32_t	rightrotate32(uint32_t num, uint32_t rotate_size);
+uint64_t	get_new_len(uint64_t input_len);
 uint32_t	get_options(char *argv[]);
 void		sha256(t_hash *hash, char *input);
 uint32_t	calc_f(uint32_t i, uint32_t b, uint32_t c, uint32_t d);
