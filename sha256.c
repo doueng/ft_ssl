@@ -129,4 +129,5 @@ void			sha256(t_hash *hash, char *input)
 		update_hash(hash, w);
 		offset += 64;
 	}
+	free(msg);
 }

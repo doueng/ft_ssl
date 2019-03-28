@@ -20,7 +20,7 @@ static void	print_p(t_env *env, char *arg, char source)
 	if (!(env->options & R_OP))
 	{
 		cmd = xv(ft_strmap(env->cmd, ft_toupper_char), MALLOC);
-		source == FILE ? ft_printf("%s(%s)= ", cmd, arg) : 0;
+		source == FILE ? ft_printf("%s (%s) = ", cmd, arg) : 0;
 		source == STR ? ft_printf("%s (\"%s\") = ", cmd, arg) : 0;
 		free(cmd);
 	}

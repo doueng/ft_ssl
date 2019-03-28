@@ -102,4 +102,5 @@ void			md5(t_hash *hash, char *input)
 		offset += 64;
 	}
 	rev_hash32(hash);
+	free(msg);
 }
