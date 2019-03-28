@@ -28,8 +28,6 @@ static void	print_p(t_env *env, char *arg, char source)
 
 static void	print_p_rev(t_env *env, char *arg, char source)
 {
-	if (env->options & Q_OP)
-		return ;
 	if (env->options & R_OP && source != STDIN)
 		source == FILE
 			? ft_printf(" %s", arg)
@@ -42,7 +40,8 @@ void		print_hash(t_env *env, char *arg, t_hash *hash, char source)
 	char		print;
 
 	i = 0;
-	print = env->options & P_OP || source == FILE || source == STR;
+	print = (env->options & Q_OP) == 0 &&
+		(env->options & P_OP || source == FILE || source == STR);
 	if (print)
 		print_p(env, arg, source);
 	while (hash->num_parts--)
