@@ -2,7 +2,18 @@ NAME = ./ft_ssl
 HEADER = ./ft_ssl.h
 LIB = ./libft/libft.a
 FLAGS = -Werror -Wextra -Wall -g
-SRC = ${wildcard *.c}
+SRC = get_options.c \
+		hash_utils.c \
+		hasher.c \
+		main.c \
+		md5.c \
+		md5_calc.c \
+		printer.c \
+		process_args.c \
+		read_from_fd.c \
+		revbytes.c \
+		sha256.c \
+		x.c
 
 SRCO = $(SRC:.c=.o)
 
@@ -17,8 +28,6 @@ $(NAME): $(SRCO) $(HEADER)
 
 clean:
 	/bin/rm -f $(SRCO)
-	/bin/rm -f compile_commands.json
-	/bin/rm -rf $(NAME).dSYM
 	make clean -C libft
 
 fclean: clean
@@ -26,4 +35,3 @@ fclean: clean
 	make fclean -C libft
 
 re: fclean all
-.SILENT:
