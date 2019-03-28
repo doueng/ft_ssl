@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   read_from_fd.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dengstra <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/03/23 19:18:10 by dengstra          #+#    #+#             */
+/*   Updated: 2019/03/23 19:18:12 by dengstra         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ssl.h"
 
 static void	*ft_realloc(void *src, size_t old_size, size_t new_size)
@@ -39,7 +51,7 @@ static char	*get_fd_string(int fd)
 	return (str);
 }
 
-int				read_from_fd(t_env *env, char *arg, int fd)
+int			read_from_fd(t_env *env, char *arg, int fd)
 {
 	char	*str;
 

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   x.c                                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dengstra <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/03/23 19:18:25 by dengstra          #+#    #+#             */
+/*   Updated: 2019/03/23 19:18:28 by dengstra         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ssl.h"
 
 static char	*get_error_msg(int error)
@@ -10,7 +22,8 @@ static char	*get_error_msg(int error)
 	msg = error == CLOSE ? "close failed" : msg;
 	msg = error == WRITE ? "write failed" : msg;
 	msg = error == MALLOC ? "malloc failed" : msg;
-	msg = error == USAGE ? "Usage: ./ft_ssl command [command opts] [command args]" : msg;
+	msg = error == USAGE ?
+		"Usage: ./ft_ssl command [command opts] [command args]" : msg;
 	msg = error == INVALID_OPTION ? "Invaid option" : msg;
 	msg = error == FCNTL ? "fcntl failed" : msg;
 	msg = error == SPLIT ? "Split failed" : msg;

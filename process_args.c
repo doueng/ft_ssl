@@ -1,22 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   hasher.c                                           :+:      :+:    :+:   */
+/*   process_args.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dengstra <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/03/23 19:17:55 by dengstra          #+#    #+#             */
-/*   Updated: 2019/03/23 19:17:56 by dengstra         ###   ########.fr       */
+/*   Created: 2019/03/28 20:28:55 by dengstra          #+#    #+#             */
+/*   Updated: 2019/03/28 20:28:58 by dengstra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
 
-void		hasher(t_env *env, char *arg, char *str, char source)
+void		process_args(t_env *env, char *argv[])
 {
-	t_hash hash;
+	int		fd;
 
-	(env->hash_func)(&hash, str);
-	print_hash(env, source == STDIN ? str : arg, &hash, source);
-	free(hash.parts);
+	while (*argv && **argv == '-')
+		argv++;
+	if (!*argv)
+		return ;
+	if (env->options & S_OP)
+	{
+		hasher(env, *argv, *argv, STR);
+		argv++;
+	}
+	while (*argv)
+	{
+		if ((fd = open(*argv, 0, O_RDONLY)) != -1)
+			read_from_fd(env, *argv, fd);
+		else
+			ft_printf("ft_ssl: md5: %s: No such file or directory\n", *argv);
+		argv++;
+	}
 }

@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   md5.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dengstra <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/03/23 19:18:03 by dengstra          #+#    #+#             */
+/*   Updated: 2019/03/23 19:18:05 by dengstra         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ssl.h"
 
-static uint32_t k[] = {
+static uint32_t	g_k[] = {
 	0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee,
 	0xf57c0faf, 0x4787c62a, 0xa8304613, 0xfd469501,
 	0x698098d8, 0x8b44f7af, 0xffff5bb1, 0x895cd7be,
@@ -18,13 +30,13 @@ static uint32_t k[] = {
 	0x6fa87e4f, 0xfe2ce6e0, 0xa3014314, 0x4e0811a1,
 	0xf7537e82, 0xbd3af235, 0x2ad7d2bb, 0xeb86d391};
 
-static uint32_t s[] = {
-		7, 12, 17, 22,  7, 12, 17, 22,  7, 12, 17, 22,  7, 12, 17, 22,
-		5,  9, 14, 20,  5,  9, 14, 20,  5,  9, 14, 20,  5,  9, 14, 20,
-		4, 11, 16, 23,  4, 11, 16, 23,  4, 11, 16, 23,  4, 11, 16, 23,
-		6, 10, 15, 21,  6, 10, 15, 21,  6, 10, 15, 21,  6, 10, 15, 21};
+static uint32_t	g_s[] = {
+	7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22,
+	5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20,
+	4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23,
+	6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21};
 
-static void		update_hash(t_hash *hash, uint32_t *w, uint32_t *k, uint32_t *s)
+static void		update_hash(t_hash *hash, uint32_t *w)
 {
 	uint32_t f;
 	uint32_t i;
@@ -34,12 +46,12 @@ static void		update_hash(t_hash *hash, uint32_t *w, uint32_t *k, uint32_t *s)
 	ft_memcpy(tmp, hash->parts, sizeof(tmp));
 	while (i < 64)
 	{
-		f = calc_f(i, tmp[1], tmp[2] , tmp[3]);
-		f += tmp[0] + k[i] + w[calc_g(i)];
+		f = calc_f(i, tmp[1], tmp[2], tmp[3]);
+		f += tmp[0] + g_k[i] + w[calc_g(i)];
 		tmp[0] = tmp[3];
 		tmp[3] = tmp[2];
 		tmp[2] = tmp[1];
-		tmp[1] += f << s[i] | f >> (32 - s[i]);
+		tmp[1] += f << g_s[i] | f >> (32 - g_s[i]);
 		i++;
 	}
 	add_chunk_to_hash(hash, tmp);
@@ -60,7 +72,7 @@ static uint8_t	*get_msg(size_t input_len,
 	return (msg);
 }
 
-static void	init_hash(t_hash *hash)
+static void		init_hash(t_hash *hash)
 {
 	hash->num_parts = 4;
 	hash->parts = xv(malloc(sizeof(uint32_t) * 4), MALLOC);
@@ -70,7 +82,7 @@ static void	init_hash(t_hash *hash)
 	hash->parts[3] = 0x10325476;
 }
 
-void		md5(t_hash *hash, char *input)
+void			md5(t_hash *hash, char *input)
 {
 	size_t		input_len;
 	size_t		new_len;
@@ -86,7 +98,7 @@ void		md5(t_hash *hash, char *input)
 	while (offset < new_len)
 	{
 		w = (uint32_t*)(msg + offset);
-		update_hash(hash, w, k, s);
+		update_hash(hash, w);
 		offset += 64;
 	}
 	rev_hash32(hash);

@@ -9,20 +9,21 @@ SRCO = $(SRC:.c=.o)
 all: $(NAME)
 
 $(NAME): $(SRCO) $(HEADER)
-	@make -C libft
+	make -C libft
 	gcc $(SRCO) $(LIB) -o $(NAME)
 
 %.o: %.c
-	@gcc -c $(FLAGS) $< -o $@
+	gcc -c $(FLAGS) $< -o $@
 
 clean:
-	@/bin/rm -f $(SRCO)
-	@/bin/rm -f compile_commands.json
-	@/bin/rm -rf $(NAME).dSYM
-	@make clean -C libft
+	/bin/rm -f $(SRCO)
+	/bin/rm -f compile_commands.json
+	/bin/rm -rf $(NAME).dSYM
+	make clean -C libft
 
 fclean: clean
-	@/bin/rm -f $(NAME)
-	@make fclean -C libft
+	/bin/rm -f $(NAME)
+	make fclean -C libft
 
 re: fclean all
+.SILENT:

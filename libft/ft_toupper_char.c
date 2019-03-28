@@ -1,22 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   hasher.c                                           :+:      :+:    :+:   */
+/*   ft_toupper_char.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dengstra <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/03/23 19:17:55 by dengstra          #+#    #+#             */
-/*   Updated: 2019/03/23 19:17:56 by dengstra         ###   ########.fr       */
+/*   Created: 2019/03/23 19:21:23 by dengstra          #+#    #+#             */
+/*   Updated: 2019/03/23 19:21:24 by dengstra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_ssl.h"
+#include "libft.h"
 
-void		hasher(t_env *env, char *arg, char *str, char source)
+char	ft_toupper_char(char c)
 {
-	t_hash hash;
-
-	(env->hash_func)(&hash, str);
-	print_hash(env, source == STDIN ? str : arg, &hash, source);
-	free(hash.parts);
+	return (ft_isalpha(c) ? c & 95 : c);
 }
