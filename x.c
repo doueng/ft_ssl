@@ -16,6 +16,7 @@ static char	*get_error_msg(int error)
 {
 	char *msg;
 
+	ft_putstr_fd("Error: ", 2);
 	msg = "ERROR";
 	msg = error == READ ? "read failed" : msg;
 	msg = error == OPEN ? "open failed" : msg;
@@ -30,11 +31,18 @@ static char	*get_error_msg(int error)
 	return (msg);
 }
 
+static void	cmd_error(void)
+{
+	ft_putstr_fd("ft_ssl: Error: Invalid command.\n\n", 2);
+	ft_putstr_fd("Standard commands:\n\n", 2);
+	ft_putstr_fd("Message Digest commands:\nmd5\nsha256\n\n", 2);
+	ft_putstr_fd("Cipher commands:\n", 2);
+}
+
 int			x(int res, int error)
 {
 	if (res == -1)
 	{
-		ft_putstr_fd("Error: ", 2);
 		ft_putendl_fd(get_error_msg(error), 2);
 		exit(-1);
 	}
@@ -45,8 +53,7 @@ void		*xv(void *res, int error)
 {
 	if (res == NULL)
 	{
-		ft_putstr_fd("Error: ", 2);
-		ft_putendl_fd(get_error_msg(error), 2);
+		error == CMD ? cmd_error() : ft_putendl_fd(get_error_msg(error), 2);
 		exit(-1);
 	}
 	return (res);

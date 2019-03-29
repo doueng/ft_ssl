@@ -55,6 +55,7 @@ enum
 	USAGE,
 	INVALID_OPTION,
 	FCNTL,
+	CMD,
 	SPLIT
 };
 
