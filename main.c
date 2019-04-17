@@ -12,14 +12,21 @@
 
 #include "ft_ssl.h"
 
+static t_arrhash funcs[2] = {
+					{"md5", md5},
+					{"sha256", sha256}};
+
 t_hash_func	get_hash_func(char *cmd)
 {
-	t_hash_func	hash_func;
+	int i;
 
-	hash_func = NULL;
-	hash_func = ft_strequ(cmd, "md5") ? md5 : hash_func;
-	hash_func = ft_strequ(cmd, "sha256") ? sha256 : hash_func;
-	return (hash_func);
+	i = sizeof(funcs) / sizeof(t_arrhash);
+	while (i--)
+	{
+		if (ft_strequ(funcs[i].name, cmd))
+			return (funcs[i].hash_func);
+	}
+	return (NULL);
 }
 
 int			main(int argc, char *argv[])

@@ -31,6 +31,12 @@ typedef struct	s_hash
 
 typedef void	(*t_hash_func)(t_hash*, char*);
 
+typedef struct	s_arrhash
+{
+	char		*name;
+	t_hash_func	hash_func;
+}				t_arrhash;
+
 typedef struct	s_env
 {
 	uint32_t	options;
