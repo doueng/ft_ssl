@@ -12,7 +12,10 @@
 
 #include "ft_ssl.h"
 
-const static t_arrhash g_funcs[2] = {{"md5", md5}, {"sha256", sha256}};
+const static t_arrhash g_funcs[5] =
+{	{"md5", md5},
+	{"sha256", sha256}
+};
 
 t_hash_func	get_hash_func(char *cmd)
 {
