@@ -10,8 +10,9 @@ SRC = get_options.c \
 		md5_calc.c \
 		printer.c \
 		process_args.c \
-		read_from_fd.c \
 		revbytes.c \
+		read_stdin.c \
+		read_file.c \
 		sha256.c \
 		x.c
 

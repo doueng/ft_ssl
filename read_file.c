@@ -1,37 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   process_args.c                                     :+:      :+:    :+:   */
+/*   read_file.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dengstra <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/03/28 20:28:55 by dengstra          #+#    #+#             */
-/*   Updated: 2019/03/28 20:28:58 by dengstra         ###   ########.fr       */
+/*   Created: 2019/04/17 14:39:28 by dengstra          #+#    #+#             */
+/*   Updated: 2019/04/17 14:39:29 by dengstra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
 
-void		process_args(t_env *env, char *argv[])
+int			read_file(t_env *env, char *arg, int fd)
 {
-	int		fd;
+	char		*str;
+	struct stat	st;
 
-	while (*argv && **argv == '-')
-		argv++;
-	if (!*argv)
-		return ;
-	if (env->options & S_OP)
-	{
-		env->input_size = ft_strlen(*argv);
-		hasher(env, *argv, *argv, STR);
-		argv++;
-	}
-	while (*argv)
-	{
-		if ((fd = open(*argv, 0, O_RDONLY)) != -1)
-			read_file(env, *argv, fd);
-		else
-			ft_printf("ft_ssl: md5: %s: No such file or directory\n", *argv);
-		argv++;
-	}
+	x(fstat(fd, &st), STAT);
+	str = xv(malloc(st.st_size), MALLOC);
+	env->input_size = st.st_size;
+	x(read(fd, str, st.st_size), MALLOC);
+	hasher(env, arg, str, FILE);
+	free(str);
+	return (0);
 }

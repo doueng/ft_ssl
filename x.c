@@ -27,6 +27,7 @@ static char	*get_error_msg(int error)
 		"Usage: ./ft_ssl command [command opts] [command args]" : msg;
 	msg = error == INVALID_OPTION ? "Invaid option" : msg;
 	msg = error == FCNTL ? "fcntl failed" : msg;
+	msg = error == STAT ? "stat failed" : msg;
 	msg = error == SPLIT ? "Split failed" : msg;
 	return (msg);
 }

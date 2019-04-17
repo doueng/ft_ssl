@@ -109,18 +109,16 @@ static void		prepare_words(uint32_t *w, uint8_t *msg, size_t offset)
 	}
 }
 
-void			sha256(t_hash *hash, char *input)
+void			sha256(t_hash *hash, char *input, size_t input_size)
 {
-	uint64_t	input_len;
 	uint64_t	new_len;
 	uint8_t		*msg;
 	uint32_t	w[64];
 	size_t		offset;
 
 	init_hash(hash);
-	input_len = ft_strlen(input);
-	new_len = get_new_len(input_len);
-	msg = get_msg(input_len, new_len, input);
+	new_len = get_new_len(input_size);
+	msg = get_msg(input_size, new_len, input);
 	new_len += 8;
 	offset = 0;
 	while (offset < new_len)

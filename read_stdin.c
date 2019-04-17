@@ -51,13 +51,14 @@ static char	*get_fd_string(int fd)
 	return (str);
 }
 
-int			read_from_fd(t_env *env, char *arg, int fd)
+int			read_stdin(t_env *env)
 {
 	char	*str;
 
-	str = get_fd_string(fd);
+	str = get_fd_string(STDIN_FILENO);
+	env->input_size = ft_strlen(str);
 	if (ft_strlen(str) > 0)
-		hasher(env, arg, str, fd == STDIN_FILENO ? STDIN : FILE);
+		hasher(env, "", str, STDIN);
 	free(str);
 	return (0);
 }

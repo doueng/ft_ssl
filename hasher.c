@@ -16,7 +16,7 @@ void		hasher(t_env *env, char *arg, char *str, char source)
 {
 	t_hash hash;
 
-	(env->hash_func)(&hash, str);
+	(env->hash_func)(&hash, str, env->input_size);
 	print_hash(env, source == STDIN ? str : arg, &hash, source);
 	free(hash.parts);
 }

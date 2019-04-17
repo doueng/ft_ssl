@@ -82,18 +82,16 @@ static void		init_hash(t_hash *hash)
 	hash->parts[3] = 0x10325476;
 }
 
-void			md5(t_hash *hash, char *input)
+void			md5(t_hash *hash, char *input, size_t input_size)
 {
-	size_t		input_len;
 	size_t		new_len;
 	uint8_t		*msg;
 	size_t		offset;
 	uint32_t	*w;
 
 	init_hash(hash);
-	input_len = ft_strlen(input);
-	new_len = get_new_len(input_len);
-	msg = get_msg(input_len, new_len, input);
+	new_len = get_new_len(input_size);
+	msg = get_msg(input_size, new_len, input);
 	offset = 0;
 	while (offset < new_len)
 	{
